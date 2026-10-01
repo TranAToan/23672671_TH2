@@ -1,97 +1,64 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# KTXGo TH2
 
-# Getting Started
+**TRẦN A TOÀN | MSSV 23672671 | Clone HTTPS: CHỜ ĐIỀN URL THỰC TẾ | Stamp #952109 | Số cuối: 1**
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+**VARIANT:** `watermarkAtTop=false`, `authField=phone`, `tabOrder=shopFirst`, `hapticOnAdd=selection`, `shipFormula=B`, `detailPresentation=card`.
 
-## Step 1: Start Metro
+## Cài đặt và chạy PowerShell
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
-
-To start the Metro dev server, run the following command from the root of your React Native project:
-
-```sh
-# Using npm
-npm start
-
-# OR using Yarn
-yarn start
+```powershell
+npm install
+$env:ANDROID_HOME = 'D:\LAP_TRINH_MOBILE\data1'
+$env:ANDROID_SDK_ROOT = $env:ANDROID_HOME
+npm run start -- --port 8083
+# Terminal khác
+& "$env:ANDROID_HOME\platform-tools\adb.exe" -s emulator-5554 reverse tcp:8083 tcp:8083
+$env:ANDROID_HOME\platform-tools\adb.exe -s emulator-5554 shell getprop ro.product.model
+npm run android -- --deviceId emulator-5554 --port 8083
 ```
 
-## Step 2: Build and run your app
+Kiểm tra tĩnh: `npm run typecheck`, `npm run lint`, `npm test -- --runInBand`.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Dependency chính
 
-### Android
+React Native CLI 0.87.1, React Navigation v7, TanStack Query, Axios, Zustand + AsyncStorage persist, FlashList, `@react-native-community/geolocation` và `react-native-haptic-feedback`.
 
-```sh
-# Using npm
-npm run android
+## Tính năng đã triển khai
 
-# OR using Yarn
-yarn android
-```
+- Auth Stack riêng, token giả `ktxgo-23672671-952109`, logout không quay lại được màn hình cũ.
+- Bottom Tabs theo thứ tự Cửa hàng, Giỏ hàng, Tôi; badge là tổng quantity.
+- API thật `https://fakestoreapi.com/products?limit=12`, interceptor `X-Student-Id`, cache `staleTime=21000`, debounce tìm kiếm 400 ms, FlashList 2 cột.
+- Detail chỉ nhận `{ id: string }`, thêm giỏ từ Home/Detail, giá quy đổi `Math.round(price * 30500)` và định dạng `vi-VN`.
+- Cart persist với khóa `ktxgo-cart-23672671`, tăng/giảm/xóa và giới hạn 99 sản phẩm mỗi dòng.
+- Location có trạng thái granted/denied/blocked/error, mở Settings khi bị blocked, Haversine và công thức B: `9000 + Math.round(km * 1500) + 2000`.
+- Watermark: `TH2 · 23672671 · TRẦN A TOÀN · #952109`.
 
-### iOS
+## Location emulator
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+Tọa độ cổng KTX dùng thử: `10.762622, 106.660172` (giả định vì đề không cung cấp tọa độ). Trong Android Emulator chọn nút `...` > **Location**, nhập latitude/longitude rồi **Send**. Sau đó quay lại app và bấm **Lấy vị trí**. Quyền runtime thật vẫn được xin trước khi đọc GPS.
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## Checklist đối chiếu
 
-```sh
-bundle install
-```
+| Yêu cầu | Vị trí | Trạng thái kiểm tra |
+|---|---|---|
+| Constants, variant, stamp, theme | `src/constants/` | Đã typecheck |
+| Auth, provider, Navigation v7 | `App.tsx`, `src/navigation/` | Đã typecheck + Jest mount |
+| API, Query, debounce, FlashList | `src/services/`, `HomeScreen.tsx` | Đã typecheck; cần thao tác mạng trên emulator |
+| Detail theo id, giá, thêm giỏ | `DetailScreen.tsx`, `ProductCard.tsx` | Đã typecheck; cần thao tác emulator |
+| Persist, badge, tăng/giảm/xóa | `src/stores/cartStore.ts`, `CartScreen.tsx` | Đã typecheck; cần đóng/mở app thực tế |
+| Location, permission, ship B | `useCampusLocation.ts`, `MeScreen.tsx` | Cần cấp/từ chối/block và gửi tọa độ trên emulator |
+| Watermark an toàn | `Watermark.tsx` | Đã kiểm tra source; cần đọc trên ảnh thật |
 
-Then, and every time you update your native dependencies, run:
+## Chuẩn bị nộp giờ thi
 
-```sh
-bundle exec pod install
-```
+- Tạo repo mới `23672671_TH2` đúng thời điểm thi.
+- Tạo ít nhất 4 commit trong giờ thi; mỗi message chứa `23672671` và `TH2`.
+- Push source, README và hai ảnh, không force-push.
+- Điền URL thật vào dòng đầu README, mời giảng viên nếu repo private.
+- Ảnh cần lưu đúng tên: `docs/screenshot-th2-home.png` và `docs/screenshot-th2-cart.png`.
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+Hiện workspace chưa có hai ảnh thật. Sau khi app chạy trên `emulator-5554`, mở Home đọc được watermark, dùng công cụ chụp màn hình Android lưu ảnh Home; chuyển sang Giỏ hàng và chụp ảnh thứ hai. Không đánh dấu ảnh đã hoàn tất trước khi kiểm tra bằng mắt.
 
-```sh
-# Using npm
-npm run ios
+## Giới hạn đã biết
 
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Thanh toán thật, Camera, Drawer, i18n và Lottie nằm ngoài phạm vi đề. Token chỉ giữ trong bộ nhớ theo yêu cầu; giỏ hàng được persist.
