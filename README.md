@@ -62,3 +62,5 @@ Hiện workspace chưa có hai ảnh thật. Sau khi app chạy trên `emulator-
 ## Giới hạn đã biết
 
 Thanh toán thật, Camera, Drawer, i18n và Lottie nằm ngoài phạm vi đề. Token chỉ giữ trong bộ nhớ theo yêu cầu; giỏ hàng được persist.
+
+23672671 TH2 - Da kiem tra thong tin bai nop va GitHub.
